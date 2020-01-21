@@ -1,0 +1,25 @@
+---
+- name: "Ensures JCliff is properly installed"
+  block:
+    - set_fact: jcliff_package_name=jcliff
+
+    - name: "Add JCliff Yum Repository"
+      yum_repository:
+        name: jcliff
+        description: JCliff repository
+        baseurl: http://people.redhat.com/~rpelisse/jcliff.yum/
+        gpgcheck: 0
+
+    - name: "Test if package '{{ jcliff_package_name }}' is already installed"
+      command: rpm -q {{ jcliff_package_name }}
+      args:
+        warn: no
+      register: rpm_info
+      changed_when: rpm_info.failed
+
+    - name: "Ensure JCliff is installed"
+      yum:
+        name: "{{ jcliff_package_name }}"
+        state: present
+      when: rpm_info.failed
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'Fedora'
