@@ -1,16 +1,27 @@
 ---
-- name: "Ensures JCliff is properly installed"
-  block:
-    - set_fact: jcliff_package_name=jcliff
+- set_fact:
+    jcliff_package_name: jcliff
+    jcliff_install_supported_os:
+      - Fedora
+      - CentOS
+      - Red Hat Enterprise Linux
 
-    - name: "Add JCliff Yum Repository"
+- block:
+    - name: "Check if JCliff installation is supported on {{ ansible_distribution }}"
+      debug:
+        msg: "Installation of JCliff on {{ ansible_distribution }} is not yet supported. Please ensure that JCliff has been installed on the system before using the associated module."
+  when: ansible_distribution not in jcliff_install_supported_os
+
+- name: "Install JCliff RPM if possible on {{ ansible_distribution}}"
+  block:
+    - name: "Add JCliff Yum Repository ({{ ansible_distribution}})"
       yum_repository:
         name: jcliff
         description: JCliff repository
         baseurl: http://people.redhat.com/~rpelisse/jcliff.yum/
         gpgcheck: 0
 
-    - name: "Test if package '{{ jcliff_package_name }}' is already installed"
+    - name: "Test if package {{ jcliff_package_name }} is already installed"
       command: rpm -q {{ jcliff_package_name }}
       args:
         warn: no
@@ -22,4 +33,4 @@
         name: "{{ jcliff_package_name }}"
         state: present
       when: rpm_info.failed
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'Fedora'
+  when: ansible_distribution in jcliff_install_supported_os
