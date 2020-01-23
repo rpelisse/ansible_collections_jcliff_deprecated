@@ -20,17 +20,14 @@
         description: JCliff repository
         baseurl: http://people.redhat.com/~rpelisse/jcliff.yum/
         gpgcheck: 0
-
-    - name: "Test if package {{ jcliff_package_name }} is already installed"
-      command: rpm -q {{ jcliff_package_name }}
-      args:
-        warn: no
-      register: rpm_info
-      changed_when: rpm_info.failed
-
-    - name: "Ensure JCliff is installed"
-      yum:
-        name: "{{ jcliff_package_name }}"
-        state: present
-      when: rpm_info.failed
+    - block:
+      - name: "Test if package {{ jcliff_package_name }} is already installed"
+        command: rpm -q {{ jcliff_package_name }}
+        args:
+          warn: no
+      rescue:
+      - name: "Ensure JCliff is installed"
+        yum:
+          name: "{{ jcliff_package_name }}"
+          state: present
   when: ansible_distribution in jcliff_install_supported_os
