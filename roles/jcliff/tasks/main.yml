@@ -30,4 +30,5 @@
         yum:
           name: "{{ jcliff_package_name }}"
           state: present
+          use_backend: "{{ jcliff_yum_backend | default('yum') }}"
   when: ansible_distribution in jcliff_install_supported_os
