@@ -34,7 +34,7 @@ class ActionModule(ActionBase):
 
     with open(templates, 'r') as file:
       data = file.read()
-    self._templar.set_available_variables(subsystem_values)
+    self._templar.available_variables = subsystem_values
     return _write_template_result_to_file(self._templar.template(data))
 
   def _deploy_custom_rules_if_any(self, tmp_remote_src):
