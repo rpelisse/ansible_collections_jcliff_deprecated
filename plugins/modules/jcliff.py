@@ -99,7 +99,7 @@ def main():
       jcliff_home=dict(type='str', default=default_jcliff_home),
       jcliff=dict(default='/usr/bin/jcliff', type='str'),
       management_username=dict(required=False, type='str'),
-      management_password=dict(required=False, type='str'),
+      management_password=dict(required=False, type='str', no_log=True),
       rules_dir=dict(type='str', default=default_jcliff_home + "/rules"),
       wfly_home=dict(required=True, aliases=['jboss_home'], type='str'),
       management_host=dict(default='localhost', type='str'),
