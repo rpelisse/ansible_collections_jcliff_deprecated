@@ -22,6 +22,11 @@ def add_to_env(name, value):
   if value is not None:
     os.environ[name] = value
 
+def define_status_based_on_server_configuration_changes(output):
+  if "Server configuration changed: true" in output:
+    return 2
+  return 0
+
 def execute_rules_with_jcliff(data):
   """ execute the rules provided using jcliff """
   jcliff_command_line = ["bash", "-x",
@@ -47,7 +52,7 @@ def execute_rules_with_jcliff(data):
                                      stderr=subprocess.STDOUT,
                                      shell=False,
                                      env=os.environ)
-    status = 0
+    status = define_status_based_on_server_configuration_changes(output.decode())
   except subprocess.CalledProcessError as jcliffexc:
     error = jcliffexc.output.decode()
     if (jcliffexc.returncode != 2) and (jcliffexc.returncode != 0):
