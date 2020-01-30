@@ -111,8 +111,10 @@ def main():
       management_port=dict(default='9990', type='str'),
       jcliff_jvm=dict(default=os.getenv("JAVA_HOME", None), type='str', required=False),
       rule_file=dict(required=False, type='str'),
-      # do not use the following parameters, value is provided by the actions plugin
+      # do not use the following parameter, value is provided by the actions plugin
       remote_rulesdir=dict(required=False, type='str'),
+      # Careful, switching to 'True' will mean each run of the module will create temporary files that it will NOT be deleted!
+      debug_mode=dict(required=False, type='bool',default=False),
       subsystems=dict(type='list', required=False, elements='dict',
                       options=dict(
                           drivers=dict(type='list', required=False, elements='dict', options=dict(

@@ -79,5 +79,6 @@ class ActionModule(ActionBase):
     new_module_args.update(dict(remote_rulesdir=tmp_remote_src,))
     result.update(self._execute_module(
         module_name='jcliff', module_args=new_module_args, task_vars=task_vars))
-    self._remove_tmp_path(self._connection._shell.tmpdir)
+    if 'debug_mode' in self._task.args and not self._task.args['debug_mode']:
+        self._remove_tmp_path(self._connection._shell.tmpdir)
     return result
