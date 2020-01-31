@@ -4,8 +4,14 @@
     EAP server configuration (subsystems)"""
 import subprocess
 import os
+import os.path
 
 from ansible.module_utils.basic import AnsibleModule
+
+def check_if_folder_exists(module,param_key):
+  path = module.params[param_key]
+  if not os.path.isdir(path):
+    module.fail_json(msg="%s is invalid: %s " % (param_key,path))
 
 def list_rule_files(rulesdir):
   """ list all the files inside the rule's directory """
@@ -157,6 +163,12 @@ def main():
 
   if os.environ.get("JCLIFF_HOME"):
     module.params["jcliff_home"] = os.environ.get("JCLIFF_HOME")
+
+  check_if_folder_exists(module, "jcliff_home")
+  check_if_folder_exists(module, "wfly_home")
+  if not module.params["jcliff_jvm"] is None:
+    check_if_folder_exists(module, "jcliff_jvm")
+  check_if_folder_exists(module, "rules_dir")
 
   choice_map = {
       "present": jcliff_present,
