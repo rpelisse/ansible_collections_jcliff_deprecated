@@ -1,3 +1,7 @@
+# THIS REPOSITORY HAS BEEN REPLACED BY WILDFLY-EXTRAS/ANSIBLE_COLLECTIONS_JCLIFF
+
+Please refers to the content of [wildfly-extras/ansible_collections_jcliff](https://github.com/wildfly-extras/ansible_collections_jcliff)
+
 # Ansible Collection - redhat.jcliff
 
 ## About
